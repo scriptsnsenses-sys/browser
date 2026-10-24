@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>DG Brows — The web, gilded.</title>
+  <meta name="description" content="DG Brows is a private, black-and-gold browsing cockpit powered by the Lightpanda engine. Hostable anywhere Docker runs.">
+  <meta name="theme-color" content="#050504">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="apple-touch-icon" href="/assets/dg-brows-mark.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:ital,wght@0,600;0,700;0,800;0,900;1,800;1,900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles/base.css">
+  <link rel="stylesheet" href="/styles/chrome.css">
+  <link rel="stylesheet" href="/styles/views.css">
+  <link rel="stylesheet" href="/styles/overlays.css">
+</head>
+<body>
+
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5M11 18l-6-6 6-6"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-reload" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.35 5.65"/><path d="M20 4v7h-7"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.2"/><path d="M8.5 10.5V7a3.5 3.5 0 0 1 7 0v3.5"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M4.6 7.5h14.8M4.6 16.5h14.8"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.7 6.1 6.3.7-4.7 4.3 1.3 6.4L12 17.3 6.4 20.5l1.3-6.4L3 9.8l6.3-.7L12 3Z"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.2C9.9 4.8 7.3 4.2 4 4.2v14.2c3.3 0 5.9.6 8 2 2.1-1.4 4.7-2 8-2V4.2c-3.3 0-5.9.6-8 2Z"/><path d="M12 6.2v14.2"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/></symbol>
+    <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6.5 4h11a1 1 0 0 1 1 1v16l-6.5-4.3L5.5 21V5a1 1 0 0 1 1-1Z"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/><circle cx="9" cy="7" r="2"/><circle cx="15" cy="12" r="2"/><circle cx="7" cy="17" r="2"/></symbol>
+    <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9.5 9.5"/><path d="M18 13.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5.5"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="11.5" height="11.5" rx="2"/><path d="M15.5 8.5V5.8A1.8 1.8 0 0 0 13.7 4H5.8A1.8 1.8 0 0 0 4 5.8v7.9a1.8 1.8 0 0 0 1.8 1.8h2.7"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9.5 7V4.8h5V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></symbol>
+    <symbol id="i-arrow-up-right" viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m4 11 8-7 8 7v8.5a1.5 1.5 0 0 1-1.5 1.5H14v-6h-4v6H5.5A1.5 1.5 0 0 1 4 19.5Z"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6"/></symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3.5 19 6v5.4c0 4.4-2.8 7.6-7 9.1-4.2-1.5-7-4.7-7-9.1V6Z"/><path d="m8.8 12 2.1 2.1 4.3-4.3"/></symbol>
+    <symbol id="i-keyboard" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6.5 9.5h.01M10 9.5h.01M13.5 9.5h.01M17 9.5h.01M7 13h10"/></symbol>
+    <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="m12 3 1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6Z"/><path d="m19 14 .8 2.2L22 17l-2.2.8L19 20l-.8-2.2L16 17l2.2-.8Z"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V5M7.5 9.5 12 5l4.5 4.5M5 19h14"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.3 4.3L19 7"/></symbol>
+    <symbol id="i-command" viewBox="0 0 24 24"><path d="M9 8.5A2.5 2.5 0 1 0 6.5 11H17.5A2.5 2.5 0 1 0 15 8.5v7A2.5 2.5 0 1 0 17.5 13H6.5A2.5 2.5 0 1 0 9 15.5Z"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4.5L20 8.5a2.1 2.1 0 0 0-3-3L5.5 17Z"/><path d="m14.5 7 3 3"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 16l9 5 9-5"/></symbol>
+  </defs>
+</svg>
+
+<div class="ambient" aria-hidden="true">
+  <div class="aurora aurora-one"></div>
+  <div class="aurora aurora-two"></div>
+  <div class="aurora aurora-three"></div>
+  <div class="gridlines"></div>
+  <div class="grain"></div>
+  <div class="spotlight" id="spotlight"></div>
+</div>
+
+<div class="boot" id="boot">
+  <div class="boot-inner">
+    <div class="boot-mark"><img src="/assets/dg-brows-mark.png" alt="DG Brows"></div>
+    <div class="boot-word">DG <span>Brows</span></div>
+    <div class="boot-tag">THE WEB, GILDED</div>
+    <div class="boot-line"><span></span></div>
+  </div>
+</div>
+
+<div class="shell" id="shell">
+  <aside class="sidebar" id="sidebar" aria-label="Workspace">
+    <div class="sidebar-head">
+      <a class="brand" href="/" data-action="home" aria-label="DG Brows start page">
+        <span class="brand-mark">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <defs>
+              <linearGradient id="brandGold" x1="8" y1="6" x2="58" y2="60" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#fff1c4"/><stop offset=".45" stop-color="#e8c47a"/><stop offset="1" stop-color="#a97c2b"/>
+              </linearGradient>
+            </defs>
+            <rect x="11" y="12" width="42" height="36" rx="6" fill="rgba(232,196,122,.05)" stroke="url(#brandGold)" stroke-width="2.2"/>
+            <path d="M11 21h42" stroke="url(#brandGold)" stroke-width="1.8"/>
+            <circle cx="17" cy="16.5" r="1.5" fill="#e8c47a"/>
+            <circle cx="22.5" cy="16.5" r="1.5" fill="#e8c47a"/>
+            <circle cx="28" cy="16.5" r="1.5" fill="#e8c47a"/>
+            <circle cx="32" cy="32" r="10" stroke="url(#brandGold)" stroke-width="1.8"/>
+            <ellipse cx="32" cy="32" rx="4" ry="10" stroke="url(#brandGold)" stroke-width="1.3"/>
+            <path d="M22 32h20M23.5 26.5h17M23.5 37.5h17" stroke="url(#brandGold)" stroke-width="1.2"/>
+            <ellipse cx="32" cy="32" rx="24" ry="7" transform="rotate(-16 32 32)" stroke="url(#brandGold)" stroke-width="2.4" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="brand-type">
+          <span class="brand-word"><b>DG</b> Brows</span>
+          <span class="brand-sub">THE GILDED BROWSER</span>
+        </span>
+      </a>
+      <button class="icon-btn sidebar-toggle" data-action="toggle-sidebar" aria-label="Collapse sidebar" title="Collapse sidebar">
+        <svg class="ico"><use href="#i-chevron-left"></use></svg>
+      </button>
+    </div>
+
+    <div class="space-block">
+      <div class="side-label"><span>Spaces</span><button class="mini-btn" data-action="new-space" title="New space" aria-label="New space">+</button></div>
+      <div class="space-list" id="spaceList"></div>
+    </div>
+
+    <button class="newtab-btn" data-action="new-tab">
+      <span class="newtab-icon"><svg class="ico"><use href="#i-plus"></use></svg></span>
+      <span class="newtab-label">New tab</span>
+      <kbd data-kbd="T">Ctrl T</kbd>
+    </button>
+
+    <div class="tabs-block">
+      <div class="side-label"><span>Tabs</span><span class="count" id="tabCount">1</span></div>
+      <div class="tab-list" id="tabList" role="tablist" aria-label="Open tabs"></div>
+    </div>
+
+    <nav class="side-nav" aria-label="Library">
+      <button class="nav-item" data-action="view" data-view="history">
+        <svg class="ico"><use href="#i-clock"></use></svg><span>History</span>
+      </button>
+      <button class="nav-item" data-action="view" data-view="bookmarks">
+        <svg class="ico"><use href="#i-bookmark"></use></svg><span>Bookmarks</span>
+      </button>
+      <button class="nav-item" data-action="palette">
+        <svg class="ico"><use href="#i-command"></use></svg><span>Command</span><kbd data-kbd="K">Ctrl K</kbd>
+      </button>
+      <button class="nav-item" data-action="open-settings">
+        <svg class="ico"><use href="#i-sliders"></use></svg><span>Settings</span>
+      </button>
+    </nav>
+
+    <div class="side-foot">
+      <button class="engine-pill" id="enginePill" data-action="engine-info" title="Engine status">
+        <span class="engine-dot"></span>
+        <span class="engine-name">Engine</span>
+        <span class="engine-state" id="engineState">connecting</span>
+      </button>
+      <div class="side-version">DG Brows <span>1.0</span></div>
+    </div>
+  </aside>
+
+  <div class="sidebar-scrim" id="sidebarScrim" hidden></div>
+
+  <main class="main">
+    <header class="toolbar">
+      <button class="icon-btn mobile-menu" data-action="toggle-sidebar" aria-label="Open menu">
+        <svg class="ico"><use href="#i-menu"></use></svg>
+      </button>
+
+      <div class="nav-group">
+        <button class="icon-btn" id="backBtn" data-action="back" aria-label="Back" title="Back" disabled>
+          <svg class="ico"><use href="#i-arrow-left"></use></svg>
+        </button>
+        <button class="icon-btn" id="forwardBtn" data-action="forward" aria-label="Forward" title="Forward" disabled>
+          <svg class="ico"><use href="#i-arrow-right"></use></svg>
+        </button>
+        <button class="icon-btn" id="reloadBtn" data-action="reload" aria-label="Reload" title="Reload">
+          <svg class="ico"><use href="#i-reload"></use></svg>
+        </button>
+      </div>
+
+      <div class="omni-wrap">
+        <form class="omnibox" id="omniForm" role="search" autocomplete="off">
+          <span class="omni-scheme" id="omniScheme" aria-hidden="true">
+            <svg class="ico" id="omniIcon"><use href="#i-globe"></use></svg>
+          </span>
+          <input
+            id="omnibox"
+            class="omni-input"
+            type="text"
+            inputmode="url"
+            spellcheck="false"
+            autocomplete="off"
+            autocapitalize="off"
+            enterkeyhint="go"
+            aria-label="Address and search bar"
+            placeholder="Search the web or enter an address"
+          >
+          <span class="omni-hint" id="omniHint">⌘L</span>
+          <div class="omni-tools">
+            <button class="omni-btn" id="readerBtn" type="button" data-action="toggle-reader" title="Reader mode" aria-label="Reader mode">
+              <svg class="ico"><use href="#i-book"></use></svg>
+            </button>
+            <button class="omni-btn" id="starBtn" type="button" data-action="bookmark" title="Bookmark this page" aria-label="Bookmark this page">
+              <svg class="ico"><use href="#i-star"></use></svg>
+            </button>
+          </div>
+        </form>
+        <div class="suggestions" id="suggestions" hidden></div>
+      </div>
+
+      <div class="tool-actions">
+        <button class="icon-btn" data-action="palette" title="Command palette" aria-label="Command palette">
+          <svg class="ico"><use href="#i-command"></use></svg>
+        </button>
+        <button class="icon-btn" data-action="open-settings" title="Settings" aria-label="Settings">
+          <svg class="ico"><use href="#i-sliders"></use></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="progress" id="progress" aria-hidden="true"><span></span></div>
+
+    <div class="stage" id="stage">
+      <section class="start" id="startView">
+        <div class="start-inner">
+          <div class="hero">
+            <div class="hero-aura" aria-hidden="true"></div>
+            <div class="hero-mark"><img src="/assets/dg-brows-mark.png" alt="DG Brows emblem" width="84" height="84"></div>
+            <div class="hero-eyebrow">
+              <span class="eyebrow-dot"></span>
+              <span id="greeting">Good evening</span>
+              <span class="eyebrow-sep">/</span>
+              <span id="today">Friday, October 23</span>
+            </div>
+            <h1 class="hero-title">The web, <em>gilded.</em></h1>
+            <p class="hero-sub">A private, lightning-fast browsing cockpit. Rendered by the Lightpanda engine, finished in black and gold.</p>
+
+            <form class="hero-search" id="heroForm">
+              <span class="hero-search-icon"><svg class="ico"><use href="#i-search"></use></svg></span>
+              <input id="heroInput" type="text" spellcheck="false" autocomplete="off" placeholder="Search the web or enter an address" aria-label="Search the web">
+              <button class="hero-go" type="submit"><span>Open</span><svg class="ico"><use href="#i-arrow-right"></use></svg></button>
+            </form>
+
+            <div class="hero-shortcuts">
+              <span><kbd data-kbd="K">Ctrl K</kbd> Commands</span>
+              <span><kbd data-kbd="T">Ctrl T</kbd> New tab</span>
+              <span><kbd data-kbd="L">Ctrl L</kbd> Address</span>
+              <span class="hero-ready"><i></i> Reader-ready</span>
+            </div>
+          </div>
+
+          <section class="start-block" id="quickBlock">
+            <div class="block-head">
+              <span class="block-title">Quick access</span>
+              <button class="link-btn" data-action="add-quick"><svg class="ico"><use href="#i-plus"></use></svg> Add</button>
+            </div>
+            <div class="quick-grid" id="quickGrid"></div>
+          </section>
+
+          <section class="start-block" id="recentBlock">
+            <div class="block-head">
+              <span class="block-title">Continue browsing</span>
+              <button class="link-btn" data-action="view" data-view="history">View history <svg class="ico"><use href="#i-arrow-up-right"></use></svg></button>
+            </div>
+            <div class="recent-grid" id="recentGrid"></div>
+          </section>
+
+          <footer class="start-foot">
+            <span class="foot-brand">DG Brows <b>1.0</b></span>
+            <span class="foot-dash"></span>
+            <span id="footEngine">Engine connecting…</span>
+            <span class="foot-spacer"></span>
+            <span class="foot-motto">All that glitters <em>is</em> gold.</span>
+          </footer>
+        </div>
+      </section>
+
+      <section class="internal" id="internalView" hidden></section>
+
+      <section class="reader" id="readerView" hidden>
+        <div class="reader-progress"><span id="readerProgress"></span></div>
+        <div class="reader-bar">
+          <button class="reader-back" data-action="close-reader">
+            <svg class="ico"><use href="#i-arrow-left"></use></svg><span>The page</span>
+          </button>
+          <div class="reader-meta" id="readerMeta"></div>
+          <div class="reader-tools">
+            <button class="reader-tool" data-action="reader-smaller" title="Smaller text" aria-label="Smaller text">A−</button>
+            <button class="reader-tool" data-action="reader-bigger" title="Larger text" aria-label="Larger text">A+</button>
+            <button class="reader-tool" data-action="open-external" title="Open original" aria-label="Open original">
+              <svg class="ico"><use href="#i-external"></use></svg>
+            </button>
+            <button class="reader-tool" data-action="close-reader" title="Close reader" aria-label="Close reader">
+              <svg class="ico"><use href="#i-x"></use></svg>
+            </button>
+          </div>
+        </div>
+        <div class="reader-scroll" id="readerScroll">
+          <article class="reader-article" id="readerArticle"></article>
+        </div>
+      </section>
+
+      <div class="frame-wrap" id="frameWrap" hidden>
+        <iframe
+          id="pageFrame"
+          title="DG Brows page"
+          sandbox="allow-scripts allow-forms allow-popups allow-modals allow-downloads"
+          referrerpolicy="no-referrer"
+        ></iframe>
+        <div class="frame-loader" id="frameLoader" hidden>
+          <div class="loader-emblem"><img src="/assets/dg-brows-mark.png" alt=""></div>
+          <div class="loader-text">Unveiling the page<span class="loader-dots"><i></i><i></i><i></i></span></div>
+          <div class="loader-line"><span></span></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="sheet-backdrop" id="sheetBackdrop" hidden></div>
+
+<aside class="settings-sheet" id="settingsSheet" hidden aria-label="Settings">
+  <div class="sheet-head">
+    <div>
+      <span class="sheet-eyebrow">DG Brows</span>
+      <h2>Settings</h2>
+    </div>
+    <button class="icon-btn" data-action="close-settings" aria-label="Close settings">
+      <svg class="ico"><use href="#i-x"></use></svg>
+    </button>
+  </div>
+
+  <div class="sheet-scroll">
+    <section class="setting-group">
+      <h3>Appearance</h3>
+      <div class="setting-row">
+        <div><label>Grain</label><p>Film grain over the obsidian.</p></div>
+        <label class="switch"><input type="checkbox" data-setting="grain"><span></span></label>
+      </div>
+      <div class="setting-row">
+        <div><label>Ambient glow</label><p>Gold light that follows the cursor.</p></div>
+        <label class="switch"><input type="checkbox" data-setting="glow"><span></span></label>
+      </div>
+      <div class="setting-row">
+        <div><label>Motion</label><p>Micro-motion across the chrome.</p></div>
+        <label class="switch"><input type="checkbox" data-setting="motion"><span></span></label>
+      </div>
+      <div class="setting-row">
+        <div><label>Compact sidebar</label><p>Icons only. More room for the web.</p></div>
+        <label class="switch"><input type="checkbox" data-setting="sidebarCollapsed"><span></span></label>
+      </div>
+    </section>
+
+    <section class="setting-group">
+      <h3>Search</h3>
+      <div class="setting-row stack">
+        <div><label>Default engine</label><p>Used when the address is not a URL.</p></div>
+        <select class="select" data-setting="searchEngine">
+          <option value="duckduckgo">DuckDuckGo</option>
+          <option value="google">Google</option>
+          <option value="bing">Bing</option>
+          <option value="brave">Brave Search</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="setting-group">
+      <h3>New tab</h3>
+      <div class="setting-row">
+        <div><label>Greeting</label><p>Time-of-day salutation on the start page.</p></div>
+        <label class="switch"><input type="checkbox" data-setting="showGreeting"><span></span></label>
+      </div>
+      <div class="setting-row">
+        <div><label>Quick access</label><p>Six gold-trimmed shortcuts.</p></div>
+        <label class="switch"><input type="checkbox" data-setting="showQuickLinks"><span></span></label>
+      </div>
+      <div class="setting-row">
+        <div><label>Continue browsing</label><p>Recent pages, ready to resume.</p></div>
+        <label class="switch"><input type="checkbox" data-setting="showRecents"><span></span></label>
+      </div>
+    </section>
+
+    <section class="setting-group">
+      <h3>Reader</h3>
+      <div class="setting-row stack">
+        <div><label>Typeface</label><p>Choose the voice of the page.</p></div>
+        <div class="segmented" data-segmented="readerFont">
+          <button type="button" data-value="serif">Serif</button>
+          <button type="button" data-value="sans">Sans</button>
+        </div>
+      </div>
+      <div class="setting-row stack">
+        <div class="range-head"><label>Text size</label><span id="readerSizeLabel">19px</span></div>
+        <input class="range" type="range" min="16" max="24" step="1" data-setting="readerSize">
+      </div>
+      <div class="setting-row stack">
+        <div><label>Column width</label><p>Measure of the reading column.</p></div>
+        <div class="segmented" data-segmented="readerWidth">
+          <button type="button" data-value="narrow">Narrow</button>
+          <button type="button" data-value="normal">Normal</button>
+          <button type="button" data-value="wide">Wide</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="setting-group">
+      <h3>Your gold</h3>
+      <div class="data-grid">
+        <div class="data-stat"><b id="statTabs">0</b><span>Tabs</span></div>
+        <div class="data-stat"><b id="statHistory">0</b><span>History</span></div>
+        <div class="data-stat"><b id="statBookmarks">0</b><span>Bookmarks</span></div>
+      </div>
+      <div class="button-row">
+        <button class="btn ghost" data-action="export-data"><svg class="ico"><use href="#i-download"></use></svg> Export gold</button>
+        <button class="btn ghost" data-action="import-data"><svg class="ico"><use href="#i-upload"></use></svg> Import</button>
+      </div>
+      <input type="file" id="importFile" accept="application/json,.json" hidden>
+      <div class="button-row">
+        <button class="btn danger-ghost" data-action="clear-history">Clear history</button>
+        <button class="btn danger-ghost" data-action="clear-all">Reset DG Brows</button>
+      </div>
+    </section>
+
+    <section class="setting-group about">
+      <h3>About</h3>
+      <div class="about-card">
+        <img src="/assets/dg-brows-mark.png" alt="">
+        <div>
+          <b>DG Brows <span>1.0</span></b>
+          <p>Engine: <span id="aboutEngine">connecting…</span></p>
+          <p>Built on the <a href="https://github.com/scriptsnsenses-sys/browser" target="_blank" rel="noopener noreferrer">Lightpanda fork</a>. Deployable anywhere Docker runs.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="sheet-foot">
+    <span>Made in black &amp; gold.</span>
+    <button class="link-btn" data-action="show-shortcuts">Keyboard shortcuts</button>
+  </div>
+</aside>
+
+<div class="modal" id="palette" hidden>
+  <div class="modal-card palette-card" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="palette-input-wrap">
+      <svg class="ico"><use href="#i-search"></use></svg>
+      <input id="paletteInput" type="text" spellcheck="false" autocomplete="off" placeholder="Type a command or search the web…" aria-label="Command palette search">
+      <kbd>Esc</kbd>
+    </div>
+    <div class="palette-list" id="paletteList"></div>
+    <div class="palette-foot">
+      <span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
+      <span><kbd>↵</kbd> Open</span>
+      <span class="palette-brand">DG Brows <b>⌘K</b></span>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="helpModal" hidden>
+  <div class="modal-card help-card" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts">
+    <div class="help-head">
+      <div>
+        <span class="sheet-eyebrow">Keyboard</span>
+        <h2>Shortcuts, gilded.</h2>
+      </div>
+      <button class="icon-btn" data-action="close-help" aria-label="Close shortcuts">
+        <svg class="ico"><use href="#i-x"></use></svg>
+      </button>
+    </div>
+    <div class="shortcut-grid">
+      <div><span>New tab</span><kbd data-kbd="T">Ctrl T</kbd></div>
+      <div><span>Close tab</span><kbd data-kbd="W">Ctrl W</kbd></div>
+      <div><span>Focus address</span><kbd data-kbd="L">Ctrl L</kbd></div>
+      <div><span>Command palette</span><kbd data-kbd="K">Ctrl K</kbd></div>
+      <div><span>Reload page</span><kbd data-kbd="R">Ctrl R</kbd></div>
+      <div><span>Bookmark page</span><kbd data-kbd="D">Ctrl D</kbd></div>
+      <div><span>Back</span><kbd data-kbd="[">Ctrl [</kbd></div>
+      <div><span>Forward</span><kbd data-kbd="]">Ctrl ]</kbd></div>
+      <div><span>Reader mode</span><kbd data-kbd="E">Ctrl E</kbd></div>
+      <div><span>New space</span><kbd data-kbd="N">Ctrl N</kbd></div>
+      <div><span>Toggle sidebar</span><kbd data-kbd="B">Ctrl B</kbd></div>
+      <div><span>Close overlay</span><kbd>Esc</kbd></div>
+    </div>
+    <p class="help-note">On macOS, replace Ctrl with ⌘. The address bar also accepts plain search terms.</p>
+  </div>
+</div>
+
+<div class="modal" id="tinyModal" hidden>
+  <div class="modal-card tiny-card" role="dialog" aria-modal="true" aria-labelledby="tinyTitle">
+    <div class="tiny-head">
+      <h3 id="tinyTitle">Add</h3>
+      <button class="icon-btn" data-action="close-tiny" aria-label="Close">
+        <svg class="ico"><use href="#i-x"></use></svg>
+      </button>
+    </div>
+    <form id="tinyForm">
+      <div class="tiny-fields" id="tinyFields"></div>
+      <div class="tiny-actions">
+        <button class="btn ghost" type="button" data-action="close-tiny">Cancel</button>
+        <button class="btn gold" type="submit" id="tinySubmit">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="context-menu" id="contextMenu" hidden></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="sr-only" id="liveRegion" aria-live="polite"></div>
+
+<script type="module" src="/app.js"></script>
+</body>
+</html>

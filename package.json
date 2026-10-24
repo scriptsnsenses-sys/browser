@@ -1,0 +1,22 @@
+{
+  "name": "dg-brows",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DG Brows — a black-gold browsing cockpit powered by the Lightpanda engine.",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test tests/unit.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "compression": "^1.7.5",
+    "express": "^4.21.2",
+    "marked": "^15.0.6",
+    "sanitize-html": "^2.14.0"
+  }
+}
